@@ -5,7 +5,7 @@ const dashboardRoutes = [
     component: () => import('@/pages/Dashboard/Home.vue'),
   },
   {
-    path: '/orders',
+    path: 'orders',
     name: 'Orders',
     component: () => import('@/pages/Dashboard/Orders.vue'),
   },
