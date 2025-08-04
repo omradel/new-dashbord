@@ -24,7 +24,7 @@
       </HomeCard>
     </div>
 
-    <!-- <Card class="h-full p-4">
+    <Card class="h-full p-4">
       <Suspense>
         <template #default>
           <HomeChart />
@@ -34,7 +34,7 @@
           <ComponentLoading />
         </template>
       </Suspense>
-    </Card> -->
+    </Card>
   </div>
 </template>
 
