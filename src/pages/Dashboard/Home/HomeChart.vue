@@ -3,7 +3,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineAsyncComponent } from 'vue'
+const apexchart = defineAsyncComponent(() => import('vue3-apexcharts'))
 
 const series = ref([
   {
