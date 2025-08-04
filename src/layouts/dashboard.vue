@@ -11,11 +11,13 @@ import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
       <SidebarInset>
         <NavBar />
 
-        <router-view v-slot="{ Component, route }" class="p-4">
+        <RouterView class="p-4" />
+
+        <!-- <router-view v-slot="{ Component, route }" class="p-4">
           <transition :name="'fade'" mode="out-in">
             <component :is="Component" :key="route.meta.usePathKey ? route.path : undefined" />
           </transition>
-        </router-view>
+        </router-view> -->
       </SidebarInset>
     </SidebarProvider>
   </div>
