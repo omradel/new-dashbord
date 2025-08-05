@@ -1,5 +1,5 @@
 import './assets/main.css'
-import { defineAsyncComponent } from 'vue'
+import './sw-update.ts'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
