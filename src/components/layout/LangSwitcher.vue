@@ -9,19 +9,14 @@
       class="w-full h-full icon cursor-pointer flex justify-center items-center"
       @click="changeLang(locale === 'ar' ? 'en' : 'ar')"
     >
-      <img
-        v-if="locale === 'en'"
-        src="/images/ar.svg"
-        class="object-cover rounded-full w-5 h-5"
-        alt=""
-      />
-
-      <img v-else src="/images/en.svg" class="object-cover rounded-full w-5 h-5" alt="" />
+      <img :src="locale === 'ar' ? en : ar" class="object-cover rounded-full w-5 h-5" alt="" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import ar from '@/assets/images/ar.svg'
+import en from '@/assets/images/en.svg'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
