@@ -18,7 +18,10 @@
           </BreadcrumbList>
         </Breadcrumb>
 
-        <ThemeSwitcher class="ml-2" />
+        <div class="flex items-center gap-2">
+          <ThemeSwitcher />
+          <LangSwitcher />
+        </div>
       </div>
     </div>
   </header>
@@ -28,6 +31,7 @@
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Separator } from 'reka-ui'
 import ThemeSwitcher from '../ThemeSwitcher.vue'
+import LangSwitcher from '../LangSwitcher.vue'
 import {
   Breadcrumb,
   BreadcrumbItem,

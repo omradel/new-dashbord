@@ -1,5 +1,5 @@
 <template>
-  <Sidebar v-bind="props">
+  <Sidebar v-bind="props" :side="locale === 'ar' ? 'right' : 'left'">
     <SidebarHeader>
       <TeamSwitcher :teams="data.teams" />
     </SidebarHeader>
@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import type { SidebarProps } from '@/components/ui/sidebar'
+import { useI18n } from 'vue-i18n'
 
 import {
   AudioWaveform,
@@ -39,6 +40,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar'
+
+const { locale } = useI18n()
 
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: 'icon',
