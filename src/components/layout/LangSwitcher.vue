@@ -11,12 +11,17 @@
     >
       <img
         v-if="locale === 'en'"
-        src="../../assets/svg/ar.svg"
+        src="../../assets/images/ar.svg"
         class="object-cover rounded-full w-5 h-5"
         alt=""
       />
 
-      <img v-else src="../../assets/svg/en.svg" class="object-cover rounded-full w-5 h-5" alt="" />
+      <img
+        v-else
+        src="../../assets/images/en.svg"
+        class="object-cover rounded-full w-5 h-5"
+        alt=""
+      />
     </div>
   </div>
 </template>
