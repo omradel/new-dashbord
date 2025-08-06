@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { visualizer } from 'rollup-plugin-visualizer'
 // import { VitePWA } from 'vite-plugin-pwa'
-import svgLoader from 'vite-svg-loader'
+// import svgLoader from 'vite-svg-loader'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,7 +14,7 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     tailwindcss(),
-    svgLoader(),
+    // svgLoader(),
     visualizer({
       open: true,
       filename: 'stats.html',
