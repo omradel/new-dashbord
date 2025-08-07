@@ -7,7 +7,7 @@ import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
 const {
   startVal = 0,
   endVal,
-  duration = 300,
+  duration = 3000,
   decimals = 2,
   locale = 'en-US',
   slowCount = 3,
