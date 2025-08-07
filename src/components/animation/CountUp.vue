@@ -1,166 +1,125 @@
 <template>
-  <span ref="elementRef" :class="className" />
+  <span>{{ formattedValue }}</span>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, computed, useTemplateRef } from 'vue'
-
-interface Props {
-  to: number
-  from?: number
-  direction?: 'up' | 'down'
-  delay?: number
+import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
+const {
+  startVal = 0,
+  endVal,
+  duration = 300,
+  decimals = 2,
+  locale = 'en-US',
+  slowCount = 3,
+  slowDelay = 250,
+} = defineProps<{
+  startVal?: number | string
+  endVal: number | string
   duration?: number
-  className?: string
-  startWhen?: boolean
-  separator?: string
-  onStart?: () => void
-  onEnd?: () => void
+  decimals?: number
+  locale?: string
+  slowCount?: number
+  slowDelay?: number
+}>()
+
+const toNumber = (val: number | string): number => {
+  const number = typeof val === 'string' ? parseFloat(val) : val
+  return isNaN(number) ? 0 : number
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  from: 0,
-  direction: 'up',
-  delay: 0,
-  duration: 2,
-  className: '',
-  startWhen: true,
-  separator: '',
+const startValNum = ref(toNumber(startVal))
+const endValNum = ref(toNumber(endVal))
+let displayVal = ref(startValNum.value)
+
+let startTime: number | null = null
+let rafId: number | null = null
+let isSlowPhase = false
+const timeouts: number[] = []
+
+const unit = 1 / Math.pow(10, decimals)
+let threshold = endValNum.value - slowCount * unit
+
+const formater = new Intl.NumberFormat(locale, {
+  minimumFractionDigits: decimals,
+  maximumFractionDigits: decimals,
 })
 
-const elementRef = useTemplateRef<HTMLSpanElement>('elementRef')
-const currentValue = ref(props.direction === 'down' ? props.to : props.from)
-const isInView = ref(false)
-const animationId = ref<number | null>(null)
-const hasStarted = ref(false)
-
-let intersectionObserver: IntersectionObserver | null = null
-
-const damping = computed(() => 20 + 40 * (1 / props.duration))
-const stiffness = computed(() => 100 * (1 / props.duration))
-
-let velocity = 0
-let startTime = 0
-
-const formatNumber = (value: number) => {
-  const options = {
-    useGrouping: !!props.separator,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }
-
-  const formattedNumber = Intl.NumberFormat('en-US', options).format(Number(value.toFixed(0)))
-
-  return props.separator ? formattedNumber.replace(/,/g, props.separator) : formattedNumber
+const easeOutQuad = (t: number) => {
+  return t * (2 - t)
 }
 
-const updateDisplay = () => {
-  if (elementRef.value) {
-    elementRef.value.textContent = formatNumber(currentValue.value)
-  }
+const cancelAll = () => {
+  if (rafId !== null) cancelAnimationFrame(rafId)
+  timeouts.forEach((id) => clearTimeout(id))
+  timeouts.length = 0
 }
 
-const springAnimation = (timestamp: number) => {
-  if (!startTime) startTime = timestamp
+const animate = (ts: number) => {
+  if (isSlowPhase) return
 
-  const target = props.direction === 'down' ? props.from : props.to
-  const current = currentValue.value
+  if (startTime === null) {
+    startTime = ts
+  }
+  const elapsed = ts - startTime
+  const rawProgress = Math.min(elapsed / duration, 1)
+  const easedProgress = easeOutQuad(rawProgress)
 
-  const displacement = target - current
-  const springForce = displacement * stiffness.value
-  const dampingForce = velocity * damping.value
-  const acceleration = springForce - dampingForce
+  const current = startValNum.value + (endValNum.value - startValNum.value) * easedProgress
 
-  velocity += acceleration * 0.016 // Assuming 60fps
-  currentValue.value += velocity * 0.016
+  if (rawProgress >= 1 || current >= threshold) {
+    isSlowPhase = true
 
-  updateDisplay()
+    if (threshold < endValNum.value) {
+      for (let n = 1; n <= slowCount; n++) {
+        const nextVal = threshold + n * unit
 
-  if (Math.abs(displacement) > 0.01 || Math.abs(velocity) > 0.01) {
-    animationId.value = requestAnimationFrame(springAnimation)
-  } else {
-    currentValue.value = target
-    updateDisplay()
-    animationId.value = null
+        const clamped = nextVal > endValNum.value ? endValNum.value : nextVal
 
-    if (props.onEnd) {
-      props.onEnd()
+        const t = window.setTimeout(() => {
+          displayVal.value = clamped
+        }, n * slowDelay)
+        timeouts.push(t)
+      }
+    } else {
+      displayVal.value = endValNum.value
     }
+    return
   }
+
+  displayVal.value = current
+  rafId = requestAnimationFrame(animate)
 }
 
 const startAnimation = () => {
-  if (hasStarted.value || !isInView.value || !props.startWhen) return
+  cancelAll()
+  startTime = null
+  isSlowPhase = false
 
-  hasStarted.value = true
+  startValNum.value = toNumber(startVal)
+  endValNum.value = toNumber(endVal)
 
-  if (props.onStart) {
-    props.onStart()
+  threshold = endValNum.value - slowCount * unit
+
+  if (endValNum.value <= startValNum.value) {
+    displayVal.value = endValNum.value
+    return
   }
 
-  setTimeout(() => {
-    startTime = 0
-    velocity = 0
-    animationId.value = requestAnimationFrame(springAnimation)
-  }, props.delay * 1000)
+  displayVal.value = startValNum.value
+  rafId = requestAnimationFrame(animate)
 }
 
-const setupIntersectionObserver = () => {
-  if (!elementRef.value) return
-
-  intersectionObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting && !isInView.value) {
-        isInView.value = true
-        startAnimation()
-      }
-    },
-    {
-      threshold: 0,
-      rootMargin: '0px',
-    },
-  )
-
-  intersectionObserver.observe(elementRef.value)
-}
-
-const cleanup = () => {
-  if (animationId.value) {
-    cancelAnimationFrame(animationId.value)
-    animationId.value = null
-  }
-
-  if (intersectionObserver) {
-    intersectionObserver.disconnect()
-    intersectionObserver = null
-  }
-}
+onMounted(startAnimation)
+onBeforeUnmount(cancelAll)
 
 watch(
-  [() => props.from, () => props.to, () => props.direction],
+  () => [startVal, endVal, duration],
   () => {
-    currentValue.value = props.direction === 'down' ? props.to : props.from
-    updateDisplay()
-    hasStarted.value = false
-  },
-  { immediate: true },
-)
-
-watch(
-  () => props.startWhen,
-  () => {
-    if (props.startWhen && isInView.value && !hasStarted.value) {
-      startAnimation()
-    }
+    startAnimation()
   },
 )
 
-onMounted(() => {
-  updateDisplay()
-  setupIntersectionObserver()
-})
-
-onUnmounted(() => {
-  cleanup()
+const formattedValue = computed(() => {
+  return formater.format(displayVal.value)
 })
 </script>

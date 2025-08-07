@@ -8,16 +8,7 @@
     </CardHeader>
     <CardContent class="pb-1">
       <h1 class="font-bold text-3xl">
-        <CountUp
-          :from="0"
-          :to="number"
-          separator=","
-          direction="up"
-          :duration="1"
-          :delay="0"
-          :start-when="true"
-          class-name="count-up-text"
-        />
+        <CountUp :endVal="number" :decimals="isFractions ? 2 : 0" />
       </h1>
     </CardContent>
     <CardFooter>
@@ -28,7 +19,9 @@
 
 <script setup lang="ts">
 import type { Slot } from 'vue'
+import { computed } from 'vue'
 import CountUp from '@/components/animation/CountUp.vue'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface Props {
   title: string
@@ -43,5 +36,7 @@ interface Slots {
 const { title, number, desc } = defineProps<Props>()
 const { icon } = defineSlots<Slots>()
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+const isFractions = computed(() => {
+  return number.toString().split('').indexOf('.') !== -1
+})
 </script>
