@@ -112,12 +112,9 @@ const startAnimation = () => {
 onMounted(startAnimation)
 onBeforeUnmount(cancelAll)
 
-watch(
-  () => [startVal, endVal, duration],
-  () => {
-    startAnimation()
-  },
-)
+watch([startVal, endVal, duration], () => {
+  startAnimation()
+})
 
 const formattedValue = computed(() => {
   return formater.format(displayVal.value)
