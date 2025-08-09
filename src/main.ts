@@ -1,5 +1,4 @@
 import './assets/main.css'
-// import './sw-update.ts'
 import i18n from './plugins/i18n.ts'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
