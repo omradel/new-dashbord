@@ -25,26 +25,15 @@
     </div>
 
     <Card class="h-full p-4">
-      <Suspense>
-        <template #default>
-          <HomeChart />
-        </template>
-
-        <template #fallback>
-          <ComponentLoading />
-        </template>
-      </Suspense>
+      <HomeChart />
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
 import HomeCard from './HomeCard.vue'
 import { Card } from '@/components/ui/card'
-import ComponentLoading from '@/components/loading/ComponentLoading.vue'
-
-const HomeChart = defineAsyncComponent(() => import('./HomeChart.vue'))
+import HomeChart from './HomeChart.vue'
 
 import { DollarSign, ScanQrCode, ShoppingCart, UsersRound } from 'lucide-vue-next'
 </script>

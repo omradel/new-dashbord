@@ -1,9 +1,28 @@
 <template>
-  <apexchart type="bar" height="100%" :options="chartOptions" :series="series" />
+  <div class="flex items-center justify-center h-full">
+    <div class="text-center">
+      <div class="flex justify-center">
+        <AlarmClock class="w-[5rem] h-[5rem] text-[#9d9d9d]" />
+      </div>
+      <span class="text-lg font-bold text-[#9d9d9d]">Comming Soon</span>
+    </div>
+  </div>
+
+  <!-- <Suspense>
+    <template #default>
+      <apexchart type="bar" height="100%" :options="chartOptions" :series="series" />
+    </template>
+
+    <template #fallback>
+      <ComponentLoading />
+    </template>
+  </Suspense> -->
 </template>
 
 <script setup>
 import { ref, defineAsyncComponent } from 'vue'
+import ComponentLoading from '@/components/loading/ComponentLoading.vue'
+import { AlarmClock } from 'lucide-vue-next'
 const apexchart = defineAsyncComponent(() => import('vue3-apexcharts'))
 
 const series = ref([
