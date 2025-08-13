@@ -7,7 +7,7 @@ const dashboardRoutes = [
   {
     path: 'orders',
     name: 'Orders',
-    component: () => import('@/pages/Dashboard/Orders.vue'),
+    component: () => import('@/pages/Dashboard/Orders/Orders.vue'),
   },
 ]
 

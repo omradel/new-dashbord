@@ -4,7 +4,7 @@
       <AppSidebar />
       <SidebarInset>
         <NavBar />
-        <RouterView class="p-4" />
+        <RouterView class="m-4" />
       </SidebarInset>
     </SidebarProvider>
   </div>
