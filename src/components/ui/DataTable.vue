@@ -52,14 +52,16 @@
           Previous
         </Button>
 
-        <template v-for="page in table.getPageCount()" :key="page">
+        <template v-for="(page, index) in pageList" :key="index">
+          <span v-if="page === '...'">...</span>
           <Button
+            v-else
             variant="outline"
             size="sm"
             :class="{
-              'text-white bg-black': table.getState().pagination.pageIndex === page - 1,
+              'text-white bg-black': table.getState().pagination.pageIndex === Number(page) - 1,
             }"
-            @click="table.setPageIndex(page - 1)"
+            @click="table.setPageIndex(Number(page) - 1)"
           >
             {{ page }}
           </Button>
@@ -79,6 +81,7 @@
 </template>
 
 <script setup lang="ts" generic="TData, TValue">
+import { computed } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import Button from './button/Button.vue'
 import {
@@ -102,6 +105,27 @@ const props = defineProps<{
   data: TData[]
 }>()
 
+const maxPageButtons = 5
+
+const pageList = computed(() => {
+  const pageCount = table.getPageCount()
+  const current = table.getState().pagination.pageIndex
+  const pages: (number | string)[] = []
+
+  if (pageCount <= maxPageButtons) {
+    for (let i = 1; i <= pageCount; i++) pages.push(i)
+  } else {
+    if (current < 2) {
+      pages.push(1, 2, 3, '...', pageCount)
+    } else if (current > pageCount - 3) {
+      pages.push(1, '...', pageCount - 2, pageCount - 1, pageCount)
+    } else {
+      pages.push(1, '...', current, current + 1, current + 2, '...', pageCount)
+    }
+  }
+  return pages
+})
+
 const table = useVueTable({
   get data() {
     return props.data
@@ -112,4 +136,6 @@ const table = useVueTable({
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
 })
+
+table.setPageSize(10)
 </script>
