@@ -42,6 +42,72 @@ async function getData(): Promise<order[]> {
       status: 2,
       email: 'm@example.com',
     },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 2,
+      email: 'omar@example.com',
+    },
   ]
 }
 

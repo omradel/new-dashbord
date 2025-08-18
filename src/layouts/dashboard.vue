@@ -27,3 +27,9 @@ onMounted(() => {
   document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr'
 })
 </script>
+
+<style>
+/* body {
+  overflow-x: hidden;
+} */
+</style>

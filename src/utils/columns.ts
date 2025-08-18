@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/vue-table'
 import { h } from 'vue'
+import DropdownAction from '@/components/ui/DataTableDropDown.vue'
 
 export type order = {
   amount: number
@@ -59,6 +60,23 @@ export const columns: ColumnDef<order>[] = [
       )
 
       return h('div', { class: `flex justify-center w-full` }, div)
+    },
+  },
+  {
+    accessorKey: 'actions',
+    header: () => h('div', { class: 'text-center' }, 'Actions'),
+    id: 'actions',
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+
+      return h(
+        'div',
+        { class: 'relative text-center' },
+        h(DropdownAction, {
+          payment,
+        }),
+      )
     },
   },
 ]
