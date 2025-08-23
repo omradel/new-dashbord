@@ -83,7 +83,7 @@
 <script setup lang="ts" generic="TData, TValue">
 import { computed } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import Button from './button/Button.vue'
+import { Button } from '../button'
 import {
   FlexRender,
   getCoreRowModel,
@@ -91,14 +91,7 @@ import {
   getPaginationRowModel,
 } from '@tanstack/vue-table'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table'
 
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]

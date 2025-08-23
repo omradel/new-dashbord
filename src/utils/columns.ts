@@ -1,6 +1,6 @@
 import type { ColumnDef } from '@tanstack/vue-table'
 import { h } from 'vue'
-import DropdownAction from '@/components/ui/DataTableDropDown.vue'
+import DropdownAction from '@/components/ui/data-table/DataTableDropDown.vue'
 
 export type order = {
   amount: number

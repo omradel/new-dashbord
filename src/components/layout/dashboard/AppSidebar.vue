@@ -1,13 +1,13 @@
 <template>
   <Sidebar v-bind="props" :side="locale === 'ar' ? 'right' : 'left'">
     <SidebarHeader>
-      <TeamSwitcher :teams="data.teams" />
+      <SidebarTeamSwitcher :teams="data.teams" />
     </SidebarHeader>
     <SidebarContent>
-      <NavMain :items="data.navMain" />
+      <SidebarNavMain :items="data.navMain" />
     </SidebarContent>
     <SidebarFooter>
-      <NavUser :user="data.user" />
+      <SidebarNavUser :user="data.user" />
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
@@ -29,9 +29,6 @@ import {
   Component,
   Settings,
 } from 'lucide-vue-next'
-import NavMain from '@/components/NavMain.vue'
-import NavUser from '@/components/NavUser.vue'
-import TeamSwitcher from '@/components/TeamSwitcher.vue'
 
 import {
   Sidebar,
@@ -39,6 +36,9 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarNavMain,
+  SidebarNavUser,
+  SidebarTeamSwitcher,
 } from '@/components/ui/sidebar'
 
 const { locale } = useI18n()

@@ -6,7 +6,7 @@
 import type { order } from '@/utils/columns'
 import { onMounted, ref } from 'vue'
 import { columns } from '@/utils/columns'
-import DataTable from '@/components/ui/DataTable.vue'
+import DataTable from '@/components/ui/data-table/DataTable.vue'
 
 const data = ref<order[]>([])
 
