@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import type { Slot } from 'vue'
 import { computed } from 'vue'
-import CountUp from '@/components/animation/CountUp.vue'
+import CountUp from '@/components/ui/coutup/CountUp.vue'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface Props {

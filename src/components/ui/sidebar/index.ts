@@ -32,6 +32,9 @@ export { default as SidebarProvider } from './SidebarProvider.vue'
 export { default as SidebarRail } from './SidebarRail.vue'
 export { default as SidebarSeparator } from './SidebarSeparator.vue'
 export { default as SidebarTrigger } from './SidebarTrigger.vue'
+export { default as SidebarNavMain } from './SidebarNavMain.vue'
+export { default as SidebarNavUser } from './SidebarNavUser.vue'
+export { default as SidebarTeamSwitcher } from './SidebarTeamSwitcher.vue'
 
 export { useSidebar } from './utils'
 
