@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <OrdersControl />
-    <DataTable :columns="columns" :data="data" />
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <InputField type="text" lable="username" required v-model:input-value="form.userName" />
+    <InputField type="text" lable="age" v-model:input-value="form.age" />
+    <!-- <DataTable :columns="columns" :data="data" /> -->
   </div>
 </template>
 
@@ -11,111 +12,12 @@ import { onMounted, ref } from 'vue'
 import { columns } from '@/utils/columns'
 import DataTable from '@/components/ui/data-table/DataTable.vue'
 import OrdersControl from './OrdersControl.vue'
+import InputField from '@/components/ui/inputs/InputField.vue'
+import { reactive } from 'vue'
 
-const data = ref<order[]>([])
-
-async function getData(): Promise<order[]> {
-  return [
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 0,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 0,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 0,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 1,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 2,
-      email: 'omar@example.com',
-    },
-  ]
-}
-
-onMounted(async () => {
-  data.value = await getData()
+//Reactive States
+const form = reactive({
+  userName: '',
+  age: '',
 })
 </script>
