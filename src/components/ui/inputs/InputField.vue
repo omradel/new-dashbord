@@ -6,7 +6,8 @@
         :id="id"
         placeholder=" "
         v-model="model"
-        @blur="handleBlur"
+        @blur="onBlur"
+        @input="onInput"
         autocomplete="off"
         :class="[
           {
@@ -41,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed, watch } from 'vue'
+import { reactive, ref, computed, inject } from 'vue'
 
 //Reactive States====================================
 const model = defineModel('inputValue')
@@ -54,15 +55,86 @@ interface Props {
   type: string
   lable: string
   required?: boolean
+  rules?: Array<any> | string
 }
 
 // Props=============================================
-const { type = 'text', lable, required } = defineProps<Props>()
+const { type = 'text', lable = 'field', required = false, rules = '' } = defineProps<Props>()
 
 // Computed=========================================
 const isValid = computed(() => errors.length === 0)
 
+// validator inject=================================
+type ValidatorAPI = {
+  validate: (
+    value: any,
+    rules: (string | { name: string; params?: any })[],
+  ) => Promise<{ valid: boolean; errors: string[] }>
+}
+const validator = inject<ValidatorAPI>('validator')
+if (!validator) {
+  console.warn('Validator plugin not found. Please provide validator via app.provide("validator")')
+}
+
 // functions=========================================
+function parseRules(raw: string | any[]): (string | { name: string; params?: any })[] {
+  if (!raw || (Array.isArray(raw) && raw.length === 0)) return []
+
+  if (Array.isArray(raw)) {
+    return raw
+  }
+
+  const parts = String(raw)
+    .split('|')
+    .map((p) => p.trim())
+    .filter(Boolean)
+  return parts.map((part) => {
+    const [name, rest] = part.split(':', 2)
+    if (rest === undefined) return name
+    if (rest.includes(',')) {
+      const arr = rest.split(',').map((s) => parseParam(s))
+      return { name, params: arr }
+    } else {
+      return { name, params: parseParam(rest) }
+    }
+  })
+}
+
+function parseParam(p: string) {
+  const trimmed = p.trim()
+  if (trimmed === 'true') return true
+  if (trimmed === 'false') return false
+  if (!isNaN(Number(trimmed)) && trimmed !== '') return Number(trimmed)
+  return trimmed
+}
+
+async function runValidation(value: any) {
+  errors.length = 0
+
+  if (!validator) return { valid: true, errors: [] }
+
+  const parsed = parseRules(rules)
+  if (!parsed.length) {
+    if (required && (value === null || value === undefined || String(value).trim() === '')) {
+      errors.push('This field is required')
+      triggerShake()
+      return { valid: false, errors: errors }
+    }
+    return { valid: true, errors: [] }
+  }
+
+  try {
+    const result = await validator.validate(value, parsed)
+    if (!result.valid) {
+      errors.push(...result.errors.map((msg) => ({ msg })))
+    }
+    return result
+  } catch (err) {
+    errors.push('Validation error')
+    return { valid: false, errors: errors }
+  }
+}
+
 function triggerShake() {
   if (!model.value && required) {
     model.value = null
@@ -74,18 +146,14 @@ function triggerShake() {
   }
 }
 
-function handleBlur() {
-  triggerShake()
+function onInput() {
+  runValidation(model.value)
 }
 
-// Watchers==========================================
-watch([() => model.value], () => {
-  errors.length = 0
-  const englishRegex = /^[A-Za-z]+$/
-  if (model.value && !englishRegex.test(model.value as string)) {
-    errors.push({ msg: 'english only allowed' })
-  } else if (required && !model.value) {
-    errors.push({ msg: 'This field cannot be empty' })
+function onBlur() {
+  if (!model.value && required) {
+    runValidation(model.value)
+    triggerShake()
   }
-})
+}
 </script>
